@@ -10,6 +10,8 @@
 #include <spdlog/details/os.h>
 #include <spdlog/common.h>
 
+#include <evopp/core/util/string.hpp>
+
 #include <cerrno>
 #include <chrono>
 #include <cstdio>
@@ -121,6 +123,11 @@ SPDLOG_INLINE void file_helper::write(const memory_buf_t &buf)
 {
     size_t msg_size = buf.size();
     auto data = buf.data();
+
+    const std::string no_col_msg = evo::remove_ansi_codes(std::string_view{data, msg_size});
+    data = no_col_msg.data();
+    msg_size = no_col_msg.size();
+
     if (std::fwrite(data, 1, msg_size, fd_) != msg_size)
     {
         throw_spdlog_ex("Failed writing to file " + os::filename_to_str(filename_), errno);
