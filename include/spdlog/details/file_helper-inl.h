@@ -31,13 +31,13 @@ SPDLOG_INLINE file_helper::~file_helper()
     close();
 }
 
-SPDLOG_INLINE void file_helper::open(const filename_t &fname, bool truncate)
+SPDLOG_INLINE void file_helper::open(const filename_t &fname, bool truncate, bool update)
 {
     close();
     filename_ = fname;
 
-    auto *mode = SPDLOG_FILENAME_T("ab");
-    auto *trunc_mode = SPDLOG_FILENAME_T("wb");
+    auto *mode = update ? SPDLOG_FILENAME_T("a+b") : SPDLOG_FILENAME_T("ab");
+    auto *trunc_mode = update ? SPDLOG_FILENAME_T("w+b") : SPDLOG_FILENAME_T("wb");
 
     if (event_handlers_.before_open)
     {

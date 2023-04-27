@@ -23,7 +23,7 @@ public:
     file_helper &operator=(const file_helper &) = delete;
     ~file_helper();
 
-    void open(const filename_t &fname, bool truncate = false);
+    void open(const filename_t &fname, bool truncate = false, bool update = false);
     void reopen(bool truncate);
     void flush();
     void sync();
@@ -31,6 +31,8 @@ public:
     void write(const memory_buf_t &buf);
     size_t size() const;
     const filename_t &filename() const;
+
+    [[nodiscard]] constexpr std::FILE* fd() const noexcept { return fd_; }
 
     //
     // return file path and its extension:
